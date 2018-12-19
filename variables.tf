@@ -9,3 +9,7 @@ variable "name" {
 variable "policy_document" {
   description = "JSON policy document with the permissions of the created role"
 }
+
+variable "external_id" {
+  description = "The ExternalID of the created role - used to secure assuming the role"
+}

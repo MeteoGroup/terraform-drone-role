@@ -16,6 +16,15 @@ data "aws_iam_policy_document" "assume_role" {
         "arn:aws:iam::${var.account_id}:role/protected/saml-administrator",
       ]
     }
+
+    # See https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html
+    # and https://en.wikipedia.org/wiki/Confused_deputy_problem
+    # for why we do this.
+    condition {
+      test     = "StringEquals"
+      variable = "sts:ExternalId"
+      values   = ["${var.external_id}"]
+    }
   }
 }
 

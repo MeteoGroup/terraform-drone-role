@@ -13,3 +13,4 @@ variable "policy_document" {
 variable "external_id" {
   description = "The ExternalID of the created role - used to secure assuming the role"
 }
+

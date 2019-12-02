@@ -1,6 +1,6 @@
 resource "aws_iam_role" "this" {
   name               = "drone-${var.name}"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -8,11 +8,9 @@ data "aws_iam_policy_document" "assume_role" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = [
-        # mg-tech-ops account - where MG's drone cluster runs
         "arn:aws:iam::904675262287:root",
-        # this account - where the role is created
         "arn:aws:iam::${var.account_id}:role/protected/saml-administrator",
       ]
     }
@@ -23,13 +21,14 @@ data "aws_iam_policy_document" "assume_role" {
     condition {
       test     = "StringEquals"
       variable = "sts:ExternalId"
-      values   = ["${var.external_id}"]
+      values   = [var.external_id]
     }
   }
 }
 
 resource "aws_iam_role_policy" "main" {
   name   = "main"
-  role   = "${aws_iam_role.this.id}"
-  policy = "${var.policy_document}"
+  role   = aws_iam_role.this.id
+  policy = var.policy_document
 }
+
